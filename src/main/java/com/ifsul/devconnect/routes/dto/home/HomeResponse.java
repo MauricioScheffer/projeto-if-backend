@@ -1,4 +1,4 @@
-package com.example.devconnect.routes.dto.home;
+package com.ifsul.devconnect.routes.dto.home;
 
 import lombok.Builder;
 import lombok.Getter;

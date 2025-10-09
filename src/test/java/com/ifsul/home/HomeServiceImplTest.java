@@ -1,13 +1,13 @@
-package com.example.demo.home;
-
-import com.example.devconnect.config.exception_handler.DomainException;
-import com.example.devconnect.repository.models.HomeEntity;
-import com.example.devconnect.repository.repositories.IHomeRepository;
-import com.example.devconnect.services.Home.HomeServiceImpl;
+package com.ifsul.home;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+
+import com.ifsul.devconnect.config.exception_handler.DomainException;
+import com.ifsul.devconnect.repository.models.HomeEntity;
+import com.ifsul.devconnect.repository.repositories.IHomeRepository;
+import com.ifsul.devconnect.services.Home.HomeServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

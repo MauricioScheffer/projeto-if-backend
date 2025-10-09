@@ -1,4 +1,4 @@
-package com.example.devconnect.config.exception_handler;
+package com.ifsul.devconnect.config.exception_handler;
 
 import org.springframework.http.HttpStatus;
 

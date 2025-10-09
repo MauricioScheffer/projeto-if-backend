@@ -1,4 +1,4 @@
-package com.example.devconnect.repository.models;
+package com.ifsul.devconnect.repository.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
