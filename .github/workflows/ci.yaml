@@ -1,10 +1,11 @@
 name: Java CI
 
-push:
-  branches: [main, develop, feature/*, task/*]
+on:
+  push:
+    branches: [main, develop, feature/*, task/*]
 
-pull-request:
-  branches: [main, develop, feature/*, task/*]
+  pull-request:
+    branches: [main, develop, feature/*, task/*]
 
 jobs:
   build:
