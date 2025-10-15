@@ -1,0 +1,36 @@
+name: Notificações no Discord
+
+on:
+  pull_request:
+    types: [opened, closed]
+  push:
+    branches: [main, develop, feature/*, task/*]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notificar Pull Request aberto
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{"content":"📢 Novo Pull Request no **Backend** aberto por **${{ github.actor }}**: [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})"}' \
+          ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificar Pull Request mergeado
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{"content":"✅ Pull Request **mergeado** no **Backend** por **${{ github.actor }}**: [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }})"}' \
+          ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Notificar Push (commit ou merge direto)
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d "{\"content\":\"🚀 Novo **push** no **Backend** por **${{ github.actor }}** na branch **${{ github.ref_name }}**: [Ver commit](${{ github.event.compare }})\"}" \
+          ${{ secrets.DISCORD_WEBHOOK }}
