@@ -29,7 +29,7 @@ public class NewsEntity {
 
     private String link;
 
-    //@ManyToOne
+    //@ManyToOne revisar
     //@JoinColumn(name = "id_projeto")
     //private Projeto projeto;
     
