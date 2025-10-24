@@ -15,27 +15,27 @@ public class NewsController {
         this.newsService = newsService;
     }
 
-    // Retorna todas as notícias (resumidas)
+    
     @GetMapping
-    public List<NewsEntity> listar() {
-        return newsService.listarTodas();
+    public List<NewsEntity> getAll() {
+        return newsService.getAll();
     }
 
-    // Retorna uma notícia específica
+    
     @GetMapping("/{id}")
-    public NewsEntity buscarPorId(@PathVariable int id) {
-        return newsService.buscarPorId(id);
+    public NewsEntity getById(@PathVariable int id) {
+        return newsService.getById(id);
     }
 
-    // Cria uma nova notícia
+    
     @PostMapping
-    public NewsEntity criar(@RequestBody NewsEntity noticia) {
-        return newsService.salvar(noticia);
+    public NewsEntity create(@RequestBody NewsEntity noticia) {
+        return newsService.save(noticia);
     }
 
-    // Deleta uma notícia
+    
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable int id) {
-        newsService.deletar(id);
+    public void delete(@PathVariable int id) {
+        newsService.delete(id);
     }
 }
