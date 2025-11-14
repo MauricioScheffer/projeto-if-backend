@@ -1,9 +1,10 @@
 package com.ifsul.devconnect.routes.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.ifsul.devconnect.repository.models.NewsEntity;
-import com.ifsul.devconnect.services.featureNews.NewsService;
+import com.ifsul.devconnect.services.News.NewsService;
 
 @RestController
 @RequestMapping("/news")
@@ -11,31 +12,33 @@ public class NewsController {
 
     private final NewsService newsService;
 
+    @Autowired
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
-    // Retorna todas as notícias (resumidas)
+    
     @GetMapping
-    public List<NewsEntity> listar() {
-        return newsService.listarTodas();
+    public List<NewsEntity> getAll() {
+        System.out.println("Chegou na controller");
+        return newsService.getAll();
     }
 
-    // Retorna uma notícia específica
+    
     @GetMapping("/{id}")
-    public NewsEntity buscarPorId(@PathVariable int id) {
-        return newsService.buscarPorId(id);
+    public NewsEntity getById(@PathVariable int id) {
+        return newsService.getById(id);
     }
 
-    // Cria uma nova notícia
+    
     @PostMapping
-    public NewsEntity criar(@RequestBody NewsEntity noticia) {
-        return newsService.salvar(noticia);
+    public NewsEntity create(@RequestBody NewsEntity noticia) {
+        return newsService.save(noticia);
     }
 
-    // Deleta uma notícia
+    
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable int id) {
-        newsService.deletar(id);
+    public void delete(@PathVariable int id) {
+        newsService.delete(id);
     }
 }
