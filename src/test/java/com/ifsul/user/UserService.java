@@ -22,39 +22,37 @@ public class UserService {
     private UserRepository userRepository;
     private UserServiceImpl userService;
 
-
     @BeforeEach
     public void setup() {
         userRepository = mock(UserRepository.class);
         BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
         when(encoder.encode(anyString())).thenReturn("senhaCriptografada");
 
-        userService = new UserServiceImpl(userRepository, encoder);
+        userService = new UserServiceImpl(userRepository, encoder, null);
     }
-
 
     @Test
     public void testSaveUserValido() {
         UserEntity user = UserEntity.builder()
-            .nome("Rafael")
-            .email("rafael@teste.com")
-            .senha("123456")
-            .tipo(Tipo.ALUNO)
-            .build();
+                .name("Rafael")
+                .email("rafael@teste.com")
+                .password("123456")
+                .type(Tipo.ALUNO)
+                .build();
 
         when(userRepository.save(user)).thenReturn(user);
 
         UserEntity result = userService.save(user);
-        assertEquals("Rafael", result.getNome());
+        assertEquals("Rafael", result.getName());
     }
 
     @Test
     public void testSaveWhithoutName() {
         UserEntity user = UserEntity.builder()
-            .email("rafael@teste.com")
-            .senha("123456")
-            .tipo(Tipo.ALUNO)
-            .build();
+                .email("rafael@teste.com")
+                .password("123456")
+                .type(Tipo.ALUNO)
+                .build();
 
         DomainException ex = assertThrows(DomainException.class, () -> userService.save(user));
         assertEquals(HttpStatus.BAD_REQUEST, ex.getStatus());
@@ -63,12 +61,12 @@ public class UserService {
     @Test
     public void testGetById_UserExists() {
         UserEntity user = UserEntity.builder()
-            .id(1)
-            .nome("Rafael")
-            .email("rafael@teste.com")
-            .senha("123456")
-            .tipo(Tipo.ALUNO)
-            .build();
+                .id(1)
+                .name("Rafael")
+                .email("rafael@teste.com")
+                .password("123456")
+                .type(Tipo.ALUNO)
+                .build();
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
@@ -84,22 +82,20 @@ public class UserService {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
     }
 
-    
     @Test
     public void testFindByEmail_UserExists() {
         UserEntity user = UserEntity.builder()
-            .nome("Rafael")
-            .email("rafael@teste.com")
-            .senha("123456")
-            .tipo(Tipo.ALUNO)
-            .build();
+                .name("Rafael")
+                .email("rafael@teste.com")
+                .password("123456")
+                .type(Tipo.ALUNO)
+                .build();
 
         when(userRepository.findByEmail("rafael@teste.com")).thenReturn(Optional.of(user));
 
         Optional<UserEntity> result = userRepository.findByEmail("rafael@teste.com");
         assertTrue(result.isPresent());
-        assertEquals("Rafael", result.get().getNome());
+        assertEquals("Rafael", result.get().getName());
     }
 
-    
 }
