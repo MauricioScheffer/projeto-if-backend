@@ -34,7 +34,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/users/login", "/register").permitAll()
+                .requestMatchers("/users/login", "/users/new").permitAll()
                 .anyRequest().authenticated()).httpBasic(basic -> basic.disable()).formLogin(f -> f.disable());
 
         http.addFilterBefore(tokenFilter,

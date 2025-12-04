@@ -37,7 +37,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         System.out.println(path);
-        if (path.equals("/users/login") || path.equals("/register")) {
+        if (path.equals("/users/login") || path.equals("/users/new")) {
             filterChain.doFilter(request, response);
             return;
         }
