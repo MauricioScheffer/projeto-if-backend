@@ -26,6 +26,11 @@ public class UserController {
         return userService.login(user.getEmail(), user.getPassword());
     }
 
+    @PostMapping("/new")
+    public UserEntity create(@RequestBody UserEntity user) {
+        return userService.save(user);
+    }
+
     @GetMapping
     public List<UserEntity> getAll() {
         return userService.getAll();
@@ -34,11 +39,6 @@ public class UserController {
     @GetMapping("/{id}")
     public UserEntity getById(@PathVariable UUID id) {
         return userService.getById(id);
-    }
-
-    @PostMapping
-    public UserEntity create(@RequestBody UserEntity user) {
-        return userService.save(user);
     }
 
     @DeleteMapping("/{id}")

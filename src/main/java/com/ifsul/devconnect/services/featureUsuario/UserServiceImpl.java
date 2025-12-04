@@ -79,31 +79,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenResponse login(String email, String senha) {
-        Optional<UserEntity> userOptional = userRepository.findUserByEmail(email);
-        if (userOptional.isEmpty()) {
+        try {
+
+            Optional<UserEntity> userOptional = userRepository.findUserByEmail(email);
+            if (userOptional.isEmpty()) {
+                throw new DomainException("Login falhou",
+                        "Email ou senha inválidos.", HttpStatus.UNAUTHORIZED);
+            }
+
+            UserEntity user = userOptional.get();
+
+            if (!passwordEncoder.matches(senha, user.getPassword())) {
+                throw new DomainException("Login falhou",
+                        "Email ou senha inválidos.",
+                        HttpStatus.UNAUTHORIZED);
+            }
+
+            TokenEntity tokenEntity = TokenEntity.builder()
+                    .expireAt(LocalDateTime.now().plusHours(3))
+                    .user(user)
+                    .build();
+
+            UUID tokenId = tokenRepository.save(tokenEntity).getId();
+
+            String token = GenerateToken.generate(tokenId.toString(),
+                    Date.from(LocalDateTime.now().plusHours(3).atZone(ZoneId.systemDefault()).toInstant()));
+
+            return new TokenResponse(token);
+
+        } catch (Exception e) {
             throw new DomainException("Login falhou",
-                    "Email ou senha inválidos.", HttpStatus.UNAUTHORIZED);
+                    "Ocorreu um erro ao tentar realizar o login.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        UserEntity user = userOptional.get();
-
-        if (!passwordEncoder.matches(senha, user.getPassword())) {
-            throw new DomainException("Login falhou",
-                    "Email ou senha inválidos.",
-                    HttpStatus.UNAUTHORIZED);
-        }
-
-        TokenEntity tokenEntity = TokenEntity.builder()
-                .expireAt(LocalDateTime.now().plusHours(3))
-                .user(user)
-                .build();
-
-        UUID tokenId = tokenRepository.save(tokenEntity).getId();
-
-        String token = GenerateToken.generate(tokenId.toString(),
-                Date.from(LocalDateTime.now().plusHours(3).atZone(ZoneId.systemDefault()).toInstant()));
-
-        return new TokenResponse(token);
     }
 
 }
