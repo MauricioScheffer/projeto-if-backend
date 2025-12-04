@@ -62,14 +62,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity getById(int id) {
+    public UserEntity getById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new DomainException("Usuário não encontrado",
                         "O usuário com o ID informado não foi encontrado.", HttpStatus.NOT_FOUND));
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(UUID id) {
         if (!userRepository.existsById(id)) {
             throw new DomainException("Usuário não encontrado",
                     "Não foi possível deletar: usuário com o ID informado não existe.", HttpStatus.NOT_FOUND);
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenResponse login(String email, String senha) {
-        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        Optional<UserEntity> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isEmpty()) {
             throw new DomainException("Login falhou",
                     "Email ou senha inválidos.", HttpStatus.UNAUTHORIZED);

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.List;
 import java.util.Arrays;
 
@@ -68,17 +69,17 @@ public class UserService {
                 .type(Tipo.ALUNO)
                 .build();
 
-        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(userRepository.findById(UUID.randomUUID())).thenReturn(Optional.of(user));
 
-        UserEntity result = userService.getById(1);
+        UserEntity result = userService.getById(UUID.randomUUID());
         assertEquals(1, result.getId());
     }
 
     @Test
     public void testDeleteUser_NonExistent() {
-        when(userRepository.existsById(99)).thenReturn(false);
+        when(userRepository.existsById(UUID.randomUUID())).thenReturn(false);
 
-        DomainException ex = assertThrows(DomainException.class, () -> userService.delete(99));
+        DomainException ex = assertThrows(DomainException.class, () -> userService.delete(UUID.randomUUID()));
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
     }
 
@@ -91,9 +92,9 @@ public class UserService {
                 .type(Tipo.ALUNO)
                 .build();
 
-        when(userRepository.findByEmail("rafael@teste.com")).thenReturn(Optional.of(user));
+        when(userRepository.findUserByEmail("rafael@teste.com")).thenReturn(Optional.of(user));
 
-        Optional<UserEntity> result = userRepository.findByEmail("rafael@teste.com");
+        Optional<UserEntity> result = userRepository.findUserByEmail("rafael@teste.com");
         assertTrue(result.isPresent());
         assertEquals("Rafael", result.get().getName());
     }
