@@ -31,43 +31,49 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+            FilterChain filterChain) {
 
-        String path = request.getRequestURI();
+        try {
+            String path = request.getRequestURI();
 
-        System.out.println(path);
-        if (path.equals("/users/login") || path.equals("/users/new")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String authHeader = request.getHeader("Authorization");
-
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
-            String token = authHeader.substring(7);
-            String tokenId = GenerateToken.extractId(token);
-
-            Optional<TokenEntity> tokenEntityOpt = tokenRepository.findById(UUID.fromString(tokenId));
-
-            if (tokenEntityOpt.isPresent()) {
-                TokenEntity tokenEntity = tokenEntityOpt.get();
-
-                if (tokenEntity.getExpireAt().isAfter(LocalDateTime.now())) {
-
-                    UserEntity user = tokenEntity.getUser();
-
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            List.of());
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+            System.out.println(path);
+            if (path.equals("/users/login") || path.equals("/users/new")) {
+                filterChain.doFilter(request, response);
+                return;
             }
+
+            String authHeader = request.getHeader("Authorization");
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
+                String token = authHeader.substring(7);
+                String tokenId = GenerateToken.extractId(token);
+                Optional<TokenEntity> tokenEntityOpt = tokenRepository.findById(UUID.fromString(tokenId));
+
+                if (tokenEntityOpt.isPresent()) {
+                    TokenEntity tokenEntity = tokenEntityOpt.get();
+
+                    if (tokenEntity.getExpireAt().isAfter(LocalDateTime.now())) {
+
+                        UserEntity user = tokenEntity.getUser();
+
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                user,
+                                null,
+                                List.of());
+
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+                filterChain.doFilter(request, response);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ServletException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
-        filterChain.doFilter(request, response);
     }
 }
