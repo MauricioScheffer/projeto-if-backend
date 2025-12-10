@@ -2,12 +2,16 @@ package com.ifsul.devconnect.repository.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 @Data
 @Builder
 @Entity
 @Table(name = "news")
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsEntity {
 
     @Id

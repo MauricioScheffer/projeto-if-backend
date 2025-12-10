@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
             return new TokenResponse(token);
 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new DomainException("Login falhou",
                     "Ocorreu um erro ao tentar realizar o login.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

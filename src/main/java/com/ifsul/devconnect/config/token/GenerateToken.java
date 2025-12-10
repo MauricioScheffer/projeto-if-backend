@@ -13,7 +13,7 @@ public class GenerateToken {
     private static final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public static String generate(String subject, Date expiration) {
-        return "Bearer " + Jwts.builder()
+        return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(expiration)
