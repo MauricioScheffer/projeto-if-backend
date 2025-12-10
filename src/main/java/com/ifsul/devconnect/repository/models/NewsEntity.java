@@ -2,15 +2,16 @@ package com.ifsul.devconnect.repository.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Data
 @Builder
 @Entity
 @Table(name = "news")
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsEntity {
 
     @Id
@@ -20,7 +21,7 @@ public class NewsEntity {
 
     private String titulo;
 
-    @Column(length = 300) 
+    @Column(length = 300)
     private String resumo;
 
     @Column(columnDefinition = "TEXT") // >>> texto longo para o conteúdo completo
@@ -30,8 +31,8 @@ public class NewsEntity {
 
     private String link;
 
-    //@ManyToOne revisar
-    //@JoinColumn(name = "id_projeto")
-    //private Projeto projeto;
-    
+    // @ManyToOne revisar
+    // @JoinColumn(name = "id_projeto")
+    // private Projeto projeto;
+
 }
